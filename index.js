@@ -1,12 +1,14 @@
 const USER_API = "http://localhost:3000/users";
 let LIST_USER = [];
 
-
 // functions
 function getUser(callback) {
     fetch(USER_API)
         .then(response => response.json())
-        .then(data => LIST_USER = [...data])
+        .then(result => {
+            LIST_USER = [...result];
+            return LIST_USER;
+        })
         .then(callback)
         .catch(err => new Error(err));
 }
@@ -20,28 +22,29 @@ function createUser(data = {}, callback) {
 
     fetch(USER_API, init)
         .then(response => response.json())
-        .then(data => {
-            LIST_USER.push(data);
+        .then(resutl => {
+            LIST_USER.push(resutl);
             return LIST_USER;
         })
-        .then(callback) // Đây là callback tự định nghĩa, sau khi gửi lên api thì ta sẽ nhận được lại giá trị 
-        //trả về là giá trị đã gửi lên, thì callback này để sau này có sử dụng giá trị trả về này làm cái gì
+        .then(callback)
+        // Đây là callback tự định nghĩa, sau khi gửi lên api thì ta sẽ nhận được lại giá trị 
+        // trả về là giá trị đã gửi lên, thì callback này để sau này có sử dụng giá trị trả về này làm cái gì
         // thì làm.
         .catch(err => new Error(err));
 }
 
 function renderUser(users = []) {
-    let _listUser = document.querySelector('#data');
-    if (!_listUser) {
+    let listUser = document.querySelector('#data');
+    if (!listUser) {
         console.log(new Error("lỗi không nhận được ul listUser"));
         return;
     }
 
     let html = '';
     html = users.map(user => `
-    <li>${user.name}: ${user.phone}</li>
+        <li>${user.name}: ${user.phone}</li>
     `);
-    _listUser.innerHTML = html.join('');
+    listUser.innerHTML = html.join('');
 }
 
 function handleCreateUser() {
@@ -67,11 +70,12 @@ function handleCreateUser() {
 
         let user = { name, phone };
 
-        createUser(user, () => {
-            renderUser;    // dùng để render lại danh sách hiển thị
-        });;
+        createUser(user, renderUser);
+        // ở đây page sẽ tự load lại sau khi thêm sau vì do chế độ save của vs nên nó cứ tự load loại trang
+        // làm không test được
     })
 }
+
 
 function start() {
     getUser(renderUser);
