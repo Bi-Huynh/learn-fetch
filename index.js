@@ -33,6 +33,22 @@ function createUser(data = {}, callback) {
         .catch(err => new Error(err));
 }
 
+function deleteUser(id, callback) {
+    let init = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+    };
+
+    fetch(`${USER_API}/${id}`, init)
+        .then(response => response.json())
+        .then(resutl => {
+            LIST_USER.splice(LIST_USER.indexOf(resutl), 1);
+            return LIST_USER;
+        })
+        .then(callback)
+        .catch(err => new Error(err));
+}
+
 function renderUser(users = []) {
     let listUser = document.querySelector('#data');
     if (!listUser) {
@@ -42,7 +58,14 @@ function renderUser(users = []) {
 
     let html = '';
     html = users.map(user => `
-        <li>${user.name}: ${user.phone}</li>
+        <li>
+            <div>
+                <p>ID: ${user.id}</p>
+                <p>Name: ${user.name}</p>
+                <p>Phone: ${user.phone}</p>
+                <button data-type="${user.id}">Xóa</button>
+            </div>
+        </li>
     `);
     listUser.innerHTML = html.join('');
 }
@@ -74,6 +97,10 @@ function handleCreateUser() {
         // ở đây page sẽ tự load lại sau khi thêm sau vì do chế độ save của vs nên nó cứ tự load loại trang
         // làm không test được
     })
+}
+
+function handleDeleteUser() {
+    // làm sao để biết nút xóa nào đang nhấn.
 }
 
 
