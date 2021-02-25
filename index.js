@@ -33,9 +33,9 @@ function createUser(data = {}, callback) {
         .catch(err => new Error(err));
 }
 
-function deleteUser(id, callback) {
+function deleteUser(id) {
     let init = {
-        method: 'POST',
+        method: 'DELETE',
         headers: { 'Content-Type': 'application/json' }
     };
 
@@ -45,7 +45,7 @@ function deleteUser(id, callback) {
             LIST_USER.splice(LIST_USER.indexOf(resutl), 1);
             return LIST_USER;
         })
-        .then(callback)
+        .then(renderUser)
         .catch(err => new Error(err));
 }
 
@@ -63,7 +63,7 @@ function renderUser(users = []) {
                 <p>ID: ${user.id}</p>
                 <p>Name: ${user.name}</p>
                 <p>Phone: ${user.phone}</p>
-                <button data-type="${user.id}">Xóa</button>
+                <button onclick="deleteUser(${user.id})">Xóa</button>
             </div>
         </li>
     `);
@@ -101,6 +101,7 @@ function handleCreateUser() {
 
 function handleDeleteUser() {
     // làm sao để biết nút xóa nào đang nhấn.
+    // let test = document.querySelector('')
 }
 
 
