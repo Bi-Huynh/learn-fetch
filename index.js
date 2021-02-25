@@ -49,6 +49,10 @@ function deleteUser(id) {
         .catch(err => new Error(err));
 }
 
+function updateUser(id, callback) {
+
+}
+
 function renderUser(users = []) {
     let listUser = document.querySelector('#data');
     if (!listUser) {
@@ -63,11 +67,40 @@ function renderUser(users = []) {
                 <p>ID: ${user.id}</p>
                 <p>Name: ${user.name}</p>
                 <p>Phone: ${user.phone}</p>
+                <div id="viewUpdate"></div>
                 <button onclick="deleteUser(${user.id})">Xóa</button>
+                <button onclick="showViewUpdate(${user.id})">Sửa</button>
             </div>
         </li>
     `);
     listUser.innerHTML = html.join('');
+}
+
+let count = 0;
+function showViewUpdate(id) {
+    if (!id) {
+        console.log(new Error("lỗi không nhận được giá trị id"));
+        return;
+    }
+
+    let viewUpdate = document.querySelector('#viewUpdate');
+
+    if (!viewUpdate) {
+        console.log(new Error("Lỗi không tìm được viewUpdate"));
+        return;
+    }
+
+    if (count === 0) {
+        viewUpdate.innerHTML = `
+        <input type="text" name="name" placeholder="name">
+        <input type="number" name="phone" placeholder="phone">
+        <button onclick="handleUpdateUser(${id})">Update</button>
+        `;
+        count = 1;
+        return;
+    }
+    viewUpdate.innerHTML = ``;
+    count = 0;
 }
 
 function handleCreateUser() {
@@ -100,6 +133,11 @@ function handleCreateUser() {
 }
 
 function handleDeleteUser() {
+    // làm sao để biết nút xóa nào đang nhấn.
+    // let test = document.querySelector('')
+}
+
+function handleUpdateUser(id) {
     // làm sao để biết nút xóa nào đang nhấn.
     // let test = document.querySelector('')
 }
